@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Science Spl-30</title>
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --card-bg: #fff;
+            --border-color: #ddd;
+            --primary-color: #4285f4;
+            --hover-color: #e8f0fe;
+            --header-bg: #fff;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #fff;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --primary-color: #569aff;
+            --hover-color: #3a3a3a;
+            --header-bg: #2d2d2d;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            margin: 0 0 8px 0;
+            padding: 12px;
+            background: var(--header-bg);
+            color: var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .channel-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        .file-info {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: var(--hover-color);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .player-section {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .video-title {
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .tabs-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+            outline: none;
+            flex: 1;
+            text-align: center;
+            max-width: 100px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .list-box {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .list-item {
+            display: block;
+            background: var(--card-bg);
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 13px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            padding: 10px 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid var(--primary-color);
+            cursor: pointer;
+        }
+
+        .list-item:hover {
+            background: var(--hover-color);
+        }
+
+        .no-items {
+            color: #999;
+            text-align: center;
+            padding: 15px;
+            font-style: italic;
+        }
+
+        .video-js {
+            width: 100% !important;
+            height: 250px !important;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 8px;
+            }
+            .tab-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                max-width: 80px;
+            }
+            .list-item {
+                font-size: 12px;
+                padding: 8px 10px;
+                margin-bottom: 6px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .video-js {
+                height: 200px !important;
+            }
+            .stats {
+                gap: 6px;
+            }
+            .stat-item {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Railway Science Spl-30</h2>
+    </div>
+        
+        <div class="player-section">
+            <div class="video-title" id="video-title">Select a video to play</div>
+            <video id="main-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>
+            <div id="youtube-player" style="display:none;width:100%;margin-top:8px;">
+                <iframe id="youtube-iframe" width="100%" height="250" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+        
+        <input type="text" class="search-bar" placeholder="Search for videos, PDFs, or other resources..." onkeyup="filterItems()">
+        
+        <div class="tabs-row">
+            <button class="tab-btn active" onclick="showTab('videos')">Videos (82)</button>
+            <button class="tab-btn" onclick="showTab('pdfs')">PDFs (57)</button>
+            <button class="tab-btn" onclick="showTab('others')">Others (0)</button>
+        </div>
+        
+        <div id="videos-tab" class="tab-content active">
+            <div class="list-box">
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/vod_non_drm_hls/migration/Y9q-0O1Zb1E/Y9q-0O1Zb1E.m3u8', '[Intro] Railway Science Spl-30 | New Batch Introduction | By Kajal Ma\'am | Careerwill App');return false;">[Intro] Railway Science Spl-30 | New Batch Introduction | By Kajal Ma\'am | Careerwill App</a><a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/PWx0CxGSJ5Q', '[Physics] Class-01 | Physics');return false;">[Physics] Class-01 | Physics</a><a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/nn7gwCkU_r8', '[Physics] Class-02 | Physics | Kinematics');return false;">[Physics] Class-02 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4476096/175194314425141268445/175194314425141268445_1268445.m3u8', '[Physics] Class-03 | Physics | Kinematics');return false;">[Physics] Class-03 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4477050/175202949778053107929/175202949778053107929_3107929.m3u8', '[Physics] Class-04 | Physics | Kinematics');return false;">[Physics] Class-04 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4478249/175211549721653107929/175211549721653107929_3107929.m3u8', '[Physics] Class-05 | Physics | Kinematics');return false;">[Physics] Class-05 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4479306/175220214741463107929/175220214741463107929_3107929.m3u8', '[Physics] Class-06 | Physics | Kinematics');return false;">[Physics] Class-06 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4481083/175246142968089047400/175246142968089047400_9047400.m3u8', '[Physics] Class-07 | Physics | Kinematics');return false;">[Physics] Class-07 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4482112/175254828188543107929/175254828188543107929_3107929.m3u8', '[Physics] Class-08 | Physics | Kinematics');return false;">[Physics] Class-08 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4483166/175263456444691268445/175263456444691268445_1268445.m3u8', '[Physics] Class-09 | Physics | Kinematics');return false;">[Physics] Class-09 | Physics | Kinematics</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4484206/175272034026483107929/175272034026483107929_3107929.m3u8', '[Physics] Class-10 | Physics | Newton Laws of Motion');return false;">[Physics] Class-10 | Physics | Newton Laws of Motion</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4485246/175280702547153107929/175280702547153107929_3107929.m3u8', '[Physics] Class-11 | Physics | Newton Laws of Motion');return false;">[Physics] Class-11 | Physics | Newton Laws of Motion</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/vod_non_drm_ios/4488981/1753171841_5312094546692754/1753171785942_504273766259847040_video_VOD.m3u8', '[Physics] Class-12 | Physics | Newton Laws of Motion');return false;">[Physics] Class-12 | Physics | Newton Laws of Motion</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4488194/175315264330333107929/175315264330333107929_3107929.m3u8', '[Physics] Class-13 | Physics | Newton Laws of Motion');return false;">[Physics] Class-13 | Physics | Newton Laws of Motion</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4489982/175323938687163107929/175323938687163107929_3107929.m3u8', '[Physics] Class-14 | Physics | Uniform Circular Motion');return false;">[Physics] Class-14 | Physics | Uniform Circular Motion</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4491760/175332572929873107929/175332572929873107929_3107929.m3u8', '[Physics] Class-15 | Physics | Gravitation');return false;">[Physics] Class-15 | Physics | Gravitation</a><a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/2D0BC6y2XUE', '[Physics] Class-16 | Physics | Gravitation');return false;">[Physics] Class-16 | Physics | Gravitation</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4495438/175367156792519047400/175367156792519047400_9047400.m3u8', '[Physics] Class-17 | Physics | Gravitation');return false;">[Physics] Class-17 | Physics | Gravitation</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4501894/175375979863065193874/175375979863065193874_5193874.m3u8', '[Physics] Class-18  | Physics | Gravitation');return false;">[Physics] Class-18  | Physics | Gravitation</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4503451/175384631733525193874/175384631733525193874_5193874.m3u8', '[Physics] Class-19 | Physics | Projectile motion');return false;">[Physics] Class-19 | Physics | Projectile motion</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4505891/175401922156556908824/175401922156556908824_6908824.m3u8', '[Physics] Class-20 | Physics | Work Power & Energy');return false;">[Physics] Class-20 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4511554/175427818519456908824/175427818519456908824_6908824.m3u8', '[Physics] Class-21 | Physics | Work Power & Energy');return false;">[Physics] Class-21 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4512481/175436433729726908824/175436433729726908824_6908824.m3u8', '[Physics] Class-22 | Physics | Work Power & Energy');return false;">[Physics] Class-22 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4513510/175445088927535193874/175445088927535193874_5193874.m3u8', '[Physics] Class-23 | Physics | Work Power & Energy');return false;">[Physics] Class-23 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4514530/175453706849275193874/175453706849275193874_5193874.m3u8', '[Physics] Class-24 | Physics | Work Power & Energy');return false;">[Physics] Class-24 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/UIf1I36KjAw', '[Physics] Class-25 | Physics | Work Power & Energy');return false;">[Physics] Class-25 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4517569/175496938332555193874/175496938332555193874_5193874.m3u8', '[Physics] Class-26 | Physics | Work Power & Energy');return false;">[Physics] Class-26 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4518913/175505542725514800893/175505542725514800893_4800893.m3u8', '[Physics] Class-27 | Physics | Work Power & Energy');return false;">[Physics] Class-27 | Physics | Work Power & Energy</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4520229/175514168796204800893/175514168796204800893_4800893.m3u8', '[Physics] Class-28 | Physics |  Friction');return false;">[Physics] Class-28 | Physics |  Friction</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4522512/175548749019433107929/175548749019433107929_3107929.m3u8', '[Physics] Class-29 | Physics | Friction');return false;">[Physics] Class-29 | Physics | Friction</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4523492/175557409290826974029/175557409290826974029_6974029.m3u8', '[Physics] Class-30 | Physics | Simple Pendulum');return false;">[Physics] Class-30 | Physics | Simple Pendulum</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4524630/175566066161426908824/175566066161426908824_6908824.m3u8', '[Physics] Class-31 | Physics | Units & Dimension');return false;">[Physics] Class-31 | Physics | Units & Dimension</a><a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/rBr8mPKRyy0', '[Physics] Class-32 | Physics | Units & Dimension');return false;">[Physics] Class-32 | Physics | Units & Dimension</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4526909/175583309547136974029/175583309547136974029_6974029.m3u8', '[Physics] Class-33 | Physics | Units & Dimension');return false;">[Physics] Class-33 | Physics | Units & Dimension</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4530232/175618003828939762013/175618003828939762013_9762013.m3u8', '[Physics] Class-34 | Physics | Electricity');return false;">[Physics] Class-34 | Physics | Electricity</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4531582/175626526693923199068/175626526693923199068_3199068.m3u8', '[Physics] Class-35 | Physics | Electricity');return false;">[Physics] Class-35 | Physics | Electricity</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4532840/175635165377654800893/175635165377654800893_4800893.m3u8', '[Physics] Class-36 | Physics | Electricity');return false;">[Physics] Class-36 | Physics | Electricity</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4534011/175643793311924800893/175643793311924800893_4800893.m3u8', '[Physics] Class-37 | Physics | Electricity');return false;">[Physics] Class-37 | Physics | Electricity</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4515366/175457718530293590984/175457718530293590984_3590984.m3u8', '[Chemistry] Class-01 | Chemistry | Periodic Table');return false;">[Chemistry] Class-01 | Chemistry | Periodic Table</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4521261/175518169062454819135/175518169062454819135_4819135.m3u8', '[Chemistry] Class-2 | Chem | Periodic Table');return false;">[Chemistry] Class-2 | Chem | Periodic Table</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4526745/175578650077087118381/175578650077087118381_7118381.m3u8', '[Chemistry] Class-3 | Chem | Periodic Table');return false;">[Chemistry] Class-3 | Chem | Periodic Table</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4527924/175587230061791590324/175587230061791590324_1590324.m3u8', '[Chemistry] Class-4 | Chem | Periodic Table');return false;">[Chemistry] Class-4 | Chem | Periodic Table</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4533827/175639274130966908824/175639274130966908824_6908824.m3u8', '[Chemistry] Class-5 | Chem | Periodic Table');return false;">[Chemistry] Class-5 | Chem | Periodic Table</a><a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4534878/175647785034466908824/175647785034466908824_6908824.m3u8', '[Chemistry] Class-6 | Chem | Chemical Reactions');return false;">[Chemistry] Class-6 | Chem | Chemical Reactions</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/I0x8H8iU4-8', '[Biology] Class-01 | Biology | Introduction');return false;">[Biology] Class-01 | Biology | Introduction</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/4wwtSP98EOA', '[Biology] Class-02 | Biology | Introduction');return false;">[Biology] Class-02 | Biology | Introduction</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/Ykw5ZRD3J8I', '[Biology] Class-03 | Biology | Introduction');return false;">[Biology] Class-03 | Biology | Introduction</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/G-v9q3uekM8', '[Biology] Class-04 | Biology | Introduction');return false;">[Biology] Class-04 | Biology | Introduction</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/zOQtiRrcZjA', '[Biology] Class-05  | Biology | Human Nutrition');return false;">[Biology] Class-05  | Biology | Human Nutrition</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4476493/175196523618057316486/175196523618057316486_7316486.m3u8', '[Biology] Class-06 | Biology | Human Nutrition');return false;">[Biology] Class-06 | Biology | Human Nutrition</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4477528/175204966192143590984/175204966192143590984_3590984.m3u8', '[Biology] Class-07 | Biology | Human Nutrition');return false;">[Biology] Class-07 | Biology | Human Nutrition</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4478667/175213594116395722963/175213594116395722963_5722963.m3u8', '[Biology] Class-08 | Biology | Human Nutrition');return false;">[Biology] Class-08 | Biology | Human Nutrition</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4479692/175222267923903907752/175222267923903907752_3907752.m3u8', '[Biology] Class-09 | Biology | Human Nutrition');return false;">[Biology] Class-09 | Biology | Human Nutrition</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4483032/175259005544686974029/175259005544686974029_6974029.m3u8', '[Biology] Class-10 | Biology | vitamin');return false;">[Biology] Class-10 | Biology | vitamin</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4483591/175265468154886974029/175265468154886974029_6974029.m3u8', '[Biology] Class-11 | Biology | vitamin');return false;">[Biology] Class-11 | Biology | vitamin</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/JY2o3RE7FnM', '[Biology] Class-12 | Biology | vitamin');return false;">[Biology] Class-12 | Biology | vitamin</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4485623/175282708467854800893/175282708467854800893_4800893.m3u8', '[Biology] Class-13 | Biology | Respiratory System');return false;">[Biology] Class-13 | Biology | Respiratory System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4488072/175310836865298770242/175310836865298770242_8770242.m3u8', '[Biology] Class-14 | Biology | Respiratory System');return false;">[Biology] Class-14 | Biology | Respiratory System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4489051/175317299524993190878/175317299524993190878_3190878.m3u8', '[Biology] Class-15 | Biology | Respiratory System');return false;">[Biology] Class-15 | Biology | Respiratory System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4490663/175325954996325780339/175325954996325780339_5780339.m3u8', '[Biology] Class-16 | Biology | Respiratory System');return false;">[Biology] Class-16 | Biology | Respiratory System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4492140/17533457309809416846/17533457309809416846_416846.m3u8', '[Biology] Class-17 | Biology | Human Disease');return false;">[Biology] Class-17 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4493467/175343233685897140453/175343233685897140453_7140453.m3u8', '[Biology] Class-18 | Biology | Human Disease');return false;">[Biology] Class-18 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4495792/175369123916556908824/175369123916556908824_6908824.m3u8', '[Biology] Class-19 | Biology | Human Disease');return false;">[Biology] Class-19 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4502823/175377760265053590984/175377760265053590984_3590984.m3u8', '[Biology] Class-20 | Biology | Human Disease');return false;">[Biology] Class-20 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4503798/175386323942843590984/175386323942843590984_3590984.m3u8', '[Biology] Class-21 | Biology | Human Disease');return false;">[Biology] Class-21 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4512900/175438287046157195824/175438287046157195824_7195824.m3u8', '[Biology] Class-22 | Biology | Human Disease');return false;">[Biology] Class-22 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4513942/175446933373446908824/175446933373446908824_6908824.m3u8', '[Biology] Class-23 | Biology | Human Disease');return false;">[Biology] Class-23 | Biology | Human Disease</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/migration/brightcove/6346619398112/6346619398112.m3u8', '[Biology] Class-24 | Biology | Human Disease (AIDS)');return false;">[Biology] Class-24 | Biology | Human Disease (AIDS)</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4514882/175455491771393199068/175455491771393199068_3199068.m3u8', '[Biology] Class-25 | Biology | Human Blood');return false;">[Biology] Class-25 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4515761/175464188280336908824/175464188280336908824_6908824.m3u8', '[Biology] Class-26 | Biology | Human Blood');return false;">[Biology] Class-26 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4516799/175490094858846908824/175490094858846908824_6908824.m3u8', '[Biology] Class-27 | Biology | Human Blood');return false;">[Biology] Class-27 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4517997/1754987410980954708/1754987410980954708_54708.m3u8', '[Biology] Class-28 | Biology | Human Blood');return false;">[Biology] Class-28 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://www.youtube.com/embed/FVu1QBEtjHU', '[Biology] Class-29 | Biology | Human Blood');return false;">[Biology] Class-29 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4520617/175515974214067140453/175515974214067140453_7140453.m3u8', '[Biology] Class-30 | Biology | Human Blood');return false;">[Biology] Class-30 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4524003/175559361150538309336/175559361150538309336_8309336.m3u8', '[Biology] Class-31 | Biology | Human Blood');return false;">[Biology] Class-31 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4525042/175567831785094819135/175567831785094819135_4819135.m3u8', '[Biology] Class-32 | Biology | Human Blood');return false;">[Biology] Class-32 | Biology | Human Blood</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4526198/175576490329893590984/175576490329893590984_3590984.m3u8', '[Biology] Class-33 | Biology | Human Heart');return false;">[Biology] Class-33 | Biology | Human Heart</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4527283/175585063430134819135/175585063430134819135_4819135.m3u8', '[Biology] Class-34 | Biology | Human Heart');return false;">[Biology] Class-34 | Biology | Human Heart</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4530664/175619702249025193874/175619702249025193874_5193874.m3u8', '[Biology] Class-35 | Biology | Human Heart');return false;">[Biology] Class-35 | Biology | Human Heart</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4531994/175628355693935193874/175628355693935193874_5193874.m3u8', '[Biology] Class-36 | Biology | Human Heart');return false;">[Biology] Class-36 | Biology | Human Heart</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4533234/175636981176229183388/175636981176229183388_9183388.m3u8', '[Biology] Class-37 | Biology | Endocrine System');return false;">[Biology] Class-37 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4534407/175645679890113907752/175645679890113907752_3907752.m3u8', '[Biology] Class-38 | Biology | Endocrine System');return false;">[Biology] Class-38 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4536452/175671536261908959035/175671536261908959035_8959035.m3u8', '[Biology] Class-39 | Biology | Endocrine System');return false;">[Biology] Class-39 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4537516/175680195427199047400/175680195427199047400_9047400.m3u8', '[Biology] Class-40 | Biology | Endocrine System');return false;">[Biology] Class-40 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://m.youtube.com/watch?v=9wzbXSsLtAk', '[Biology] Class-41 | Biology | Endocrine System');return false;">[Biology] Class-41 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4540768/175697450990601590324/175697450990601590324_1590324.m3u8', '[Biology] Class-42 | Biology | Endocrine System');return false;">[Biology] Class-42 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://m.youtube.com/watch?v=0Ye8Y-jxvb4', '[Biology] Class-43 | Biology | Endocrine System');return false;">[Biology] Class-43 | Biology | Endocrine System</a>
+                <a href="#" class="list-item" onclick="playVideo('https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4545807/175749464713241268445/175749464713241268445_1268445.m3u8', '[Biology] Class-44 | Biology | Human Eye');return false;">[Biology] Class-44 | Biology | Human Eye</a>
+            </div>
+        </div>
+        
+        <div id="pdfs-tab" class="tab-content">
+            <div class="list-box">
+                <a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6zf064a95:crwilladmin/class-attachment/68b189d33fed1_8_to_9_am_28th_aug_compressed.pdf" target="_blank" class="list-item">[Physics] Phy | 28 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68afecd54d54d_8_to_9_am_27th_aug.pdf" target="_blank" class="list-item">[Physics] Phy | 27 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68ac22625a61a_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_22aug_compressed.pdf" target="_blank" class="list-item">[Physics] Phy | 22 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68a808a376434_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_21aug.pdf" target="_blank" class="list-item">[Physics] Phy | 21 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68a6ae20bcb5e_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_20aug.pdf" target="_blank" class="list-item">[Physics] Phy | 20 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68a56f2fe90a1_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_19aug.pdf" target="_blank" class="list-item">[Physics] Phy | 19 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68a40df7ef1ee_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_18aug.pdf" target="_blank" class="list-item">[Physics] Phy | 18 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68a2b00537dfd_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_14aug.pdf" target="_blank" class="list-item">[Physics] Phy | 14 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/689d8addd2f86_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_13aug.pdf" target="_blank" class="list-item">[Physics] Phy | 13 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/689c3cb2cd4f0_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_12aug.pdf" target="_blank" class="list-item">[Physics] Phy | 12 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/689c3b1434ccd_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_08aug.pdf" target="_blank" class="list-item">[Physics] Phy | 08 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68959f1e7d87b_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_07aug.pdf" target="_blank" class="list-item">[Physics] Phy | 7 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/689431f12228c_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_06aug_compressed.pdf" target="_blank" class="list-item">[Physics] Phy | 06 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68933517decd4_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_05aug.pdf" target="_blank" class="list-item">[Physics] Phy | 05 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6891be1f3288c_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_04aug.pdf" target="_blank" class="list-item">[Physics] Phy | 04 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/lclsys_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_01aug.pdf" target="_blank" class="list-item">[Physics] Phy | 01 Aug | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/lclsys_20250730090350158_compressed.pdf" target="_blank" class="list-item">[Physics] Phy | 30 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/lclsys_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_29th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 29 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/lclsys_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_24th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 24 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/lclsys_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_28th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 28 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/lclsys_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_25th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 25 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6881d31ae08dc_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_23th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 23 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/688078b55970f_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_22th_julycompressed.pdf" target="_blank" class="list-item">[Physics] Phy | 22 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687f35e04131a_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_21th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 21 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687f26746b0fb_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_17th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 17 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687b4614bdc48_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_18th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 18 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68788a8b54e5b_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_16th_julycompressed.pdf" target="_blank" class="list-item">[Physics] Phy | 16 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687737a66e115_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_15th_julycompressed.pdf" target="_blank" class="list-item">[Physics] Phy | 15 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6875ee0f0a8e1_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_14th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 14 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68709e1c6797b_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_11th_julycompressed.pdf" target="_blank" class="list-item">[Physics] Phy | 11 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68709d0c78161_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_10th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 10 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686e0bb784da2_sci_spl_29_30_and_technician_grade_3_new_batch_express_batch_123_DP_AWO_batch_2_9th_july.pdf" target="_blank" class="list-item">[Physics] Phy | 9 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686e0b69b090e_ilovepdfmerged_46compressed.pdf" target="_blank" class="list-item">[Physics] Phy | 7&8 July | Class PNG</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/673b099309126_Phy_Eng_Full_Notescompressed.pdf" target="_blank" class="list-item">[Physics] Phy (Eng) Full Notes</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/673b097f42e0d_Phy_Hindi_Full_Notescompressed_1.pdf" target="_blank" class="list-item">[Physics] Phy (Hindi) Full Notes</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/663df66aaf4cd_Soap & detergent_compressed.pdf" target="_blank" class="list-item">[Chemistry] Soap & Detergent</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/662f2b17a2a14_hydrocarbon_compressed.pdf" target="_blank" class="list-item">[Chemistry] Hydrocarbon</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/662f2aed64acc_Drugs_compressed.pdf" target="_blank" class="list-item">[Chemistry] Drugs</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6628e569af44a_Fuel_compressed.pdf" target="_blank" class="list-item">[Chemistry] Fuel</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/66277742e9e54_catalyst & molecular weight_compressed.pdf" target="_blank" class="list-item">[Chemistry] Catalyst & Molecular Weight</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/662776f556299_WATER & HYBRIDISATION_compressed.pdf" target="_blank" class="list-item">[Chemistry] Water Hybridization</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6620de2571211_Valency.pdf" target="_blank" class="list-item">[Chemistry] Valency</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/661f6ddbf32b5_Glass_compressed.pdf" target="_blank" class="list-item">[Chemistry] Glass</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/661e4a51995a5_polymers.pdf" target="_blank" class="list-item">[Chemistry] Polymers</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/66150f95424ad_Radioactivity (DONE).pdf" target="_blank" class="list-item">[Chemistry] Radioactivity</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/66150c2f1027f_chemical reaction_compressed.pdf" target="_blank" class="list-item">[Chemistry] Chemical Reaction</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6613c827eea08_carbon and its compounds done.pdf" target="_blank" class="list-item">[Chemistry] Carbon and its Compounds</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/66137912bcbf2_Mixture.pdf" target="_blank" class="list-item">[Chemistry] Mixture</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/65fc23e101a26_METALS (DONE).pdf" target="_blank" class="list-item">[Chemistry] Matter</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/65efda63cebec_acid base and salt DONE.pdf" target="_blank" class="list-item">[Chemistry] Acid Base and Salt</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/65ef2d34bf656_Noble gases.pdf" target="_blank" class="list-item">[Chemistry] Noble gases</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/65c20750adc72_Periodic Table (done).pdf" target="_blank" class="list-item">[Chemistry] Periodic table</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/65b7b441eea5c_Atomic structure  (DONE).pdf" target="_blank" class="list-item">[Chemistry] Atomic Structure</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/673afdc522567_Heart_Hindi.pdf" target="_blank" class="list-item">[Biology] Heart (Hindi)</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/673afdb1eca12_Complete_Biology_Notes_Hindi_Medium.pdf" target="_blank" class="list-item">[Biology] Complete Biology Notes (Hindi Medium)</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/673afd9dc764d_Complete_Biology_Notes_English_Medium_Part2.pdf" target="_blank" class="list-item">[Biology] Complete Biology Notes (English Medium) Part-2</a><a href="https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/673afd81bcc85_Complete_Biology_Notes_English_Medium_Part1.pdf" target="_blank" class="list-item">[Biology] Complete Biology Notes (English Medium) Part-1</a>
+            </div>
+        </div>
+        
+        <div id="others-tab" class="tab-content">
+            <div class="list-box">
+                <div class="no-items">No others found</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeBtn = document.querySelector('.theme-toggle');
+            themeBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            
+            // Save theme preference
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.theme-toggle').textContent = '☀️';
+        }
+
+        // Tabs functionality
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Update active button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.tab-btn[onclick="showTab(\'' + tabName + '\')"]').classList.add('active');
+        }
+        
+        // Search functionality
+        function filterItems() {
+            const searchTerm = document.querySelector('.search-bar').value.toLowerCase();
+            const activeTab = document.querySelector('.tab-content.active');
+            
+            activeTab.querySelectorAll('.list-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Video player initialization
+        var player = videojs('main-video-player', {
+            controls: true,
+            autoplay: false,
+            preload: 'auto',
+            fluid: true,
+            responsive: true,
+            playbackRates: [0.5, 1, 1.5, 2]
+        });
+
+        // Add double tap seeking
+        let lastTap = 0;
+        player.el().addEventListener('touchstart', function(event) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                // Double tap detected
+                const rect = player.el().getBoundingClientRect();
+                const x = event.touches[0].clientX - rect.left;
+                
+                if (x < rect.width / 2) {
+                    // Left side - rewind 10 seconds
+                    player.currentTime(Math.max(0, player.currentTime() - 10));
+                } else {
+                    // Right side - forward 10 seconds
+                    player.currentTime(Math.min(player.duration(), player.currentTime() + 10));
+                }
+            }
+            lastTap = currentTime;
+        });
+
+        // Add keyboard shortcuts for desktop
+        document.addEventListener('keydown', function(event) {
+            if (document.getElementById('main-video-player').style.display !== 'none') {
+                if (event.key === 'ArrowLeft') {
+                    player.currentTime(Math.max(0, player.currentTime() - 10));
+                } else if (event.key === 'ArrowRight') {
+                    player.currentTime(Math.min(player.duration(), player.currentTime() + 10));
+                }
+            }
+        });
+
+        // YouTube video ID extraction
+        function getYouTubeVideoId(url) {
+            url = url.replace('youtu.be/', 'youtube.com/watch?v=');
+            var regExp = /[?&]v=([^&#]*)/;
+            var match = url.match(regExp);
+            if (!match) {
+                var embedExp = /youtube.com\/embed\/([^?&]+)/;
+                match = url.match(embedExp);
+            }
+            return match && match[1] ? match[1] : null;
+        }
+
+        // Play video function
+        function playVideo(url, title) {
+            document.getElementById('video-title').textContent = title;
+            
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                var videoId = getYouTubeVideoId(url);
+                if (videoId) {
+                    document.getElementById('main-video-player').style.display = 'none';
+                    document.getElementById('youtube-player').style.display = 'block';
+                    document.getElementById('youtube-iframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&rel=0&modestbranding=1&vq=hd1080";
+                    return;
+                }
+            }
+            
+            document.getElementById('youtube-player').style.display = 'none';
+            document.getElementById('main-video-player').style.display = 'block';
+            
+            var ext = url.split('?')[0].split('.').pop().toLowerCase();
+            if (ext == 'm3u8') {
+                player.src({src: url, type: 'application/x-mpegURL'});
+            } else if (ext == 'mp4') {
+                player.src({src: url, type: 'video/mp4'});
+            } else {
+                player.src({src: url, type: 'video/mp4'});
+            }
+            player.play().catch(function(err){
+                console.log('Play error:', err);
+                alert('Error playing video. Please try another video.');
+            });
+        }
+
+        // Auto play first video
+        window.onload = function() {
+            var firstVideo = document.querySelector('#videos-tab .list-item');
+            if(firstVideo) {
+                setTimeout(function() {
+                    firstVideo.click();
+                }, 1000);
+            }
+        };
+    </script>
+</body>
+</html>
+    
